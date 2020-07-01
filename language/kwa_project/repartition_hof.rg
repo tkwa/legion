@@ -14,10 +14,11 @@ end
 -- runs task t on region r with initial partition pi,
 -- repartitioning condition f
 -- would be cleaner if didn't have to specify subtype of region 5 times
+-- it's not
 task do_with_repartition(r: region(int),
-                         t: task(region(int))
-                         f: {region(int)} -> {bool}
-                         pi: task(region(int)))
+                         t: task({reads writes region(int)})
+                         f: task({reads region(int)}, bool)
+                         pi: task({region(int)}, partition)
 where reads writes(r) do
   -- implementation
 end
