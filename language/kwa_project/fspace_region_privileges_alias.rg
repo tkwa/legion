@@ -29,12 +29,11 @@ end
 
 task main()
   var x = new_t(10)
-
-  -- Reassignment of region compiles...
-  x.r = region(ispace(ptr, size), int)
-  -- however, the below would not compile
-  -- x = new_t(10)
-  f(x)
-  var sum = g(x)
+  var y = id(x) -- identity function
+  -- y is of the same field space type as x (in fact, is alias of x)
+  -- and so carries the same region privileges.
+  -- This is not being implemented...
+  f(y)
+  var sum = g(y)
 end
 regentlib.start(main)
