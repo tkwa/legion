@@ -1,22 +1,3 @@
-# Current type system
-
-The type system of the version of Regent I will formalize differs from the type system for the Legion programming model described in [oopsla2013] in the following ways:
-
-- Regent syntax is built over Terra, itself a superset of Lua.
-- Task types exist separately from function types. Functions are lightweight; tasks are not first-class.
-- Can only reduce by a few primitive functions, not by any function/task
-- Can iterate through all items in a region using index spaces
-- Regions are homogeneous (all pointers are to ints or bools)
-- Can create regions on the fly
-- Can index arbitrary subregions of a partition (e.g. `p[expr]`)
-- Regions have fields; a task can have field-specific privileges
-- In oopsla2013, there are region relations with a region-relation type $$\exists r_1 \dots r_n.T \text{ where } \Omega.$$ In Legion region-relations are realized as field spaces.
-
-Incomplete operational semantics for this idealized version of Regent are in development. However, the type system actually implemented in Regent as of June 2020 is more complicated due to implementation details. It differs from the ideal features in the following ways:
-
-- Some dependent partitioning features are not implemented.
-- Partitions can have an arbitrary number of subregions, in contrast to the `T-Partition` rule in oopsla2013 where ???
-
 # Extensions to type system
 
 ## Tasks with privileged-region and task arguments
@@ -37,7 +18,12 @@ Regions can now be declared with privileges. Tasks can be passed privileged-regi
 Limitations:
 
 - Tasks are still not first-class; in particular, a task cannot generate or return tasks.
+- This syntax does not allow for privileges on specific fields of regions.
 - We're not looking at privilege inference yet, but it is a future possibility.
+
+### Formalization
+
+There are no new formal semantics compared with [oopsla2013]. We do not introduce a privileged-region type; privileged regions in tasks is mainly a syntactic change for consistency with fspace region privileges. Task arguments do not represent a change to the oopsla2013 type system, because there is no existing restriction on the arguments of functions.
 
 ## Region and fspace assignment
 
@@ -97,7 +83,7 @@ regentlib.start(main)
 
 ## Partition assignment
 
-Assignment of partitions is now allowed. The new value of the partition must be of the same region and type (e.g. `equal`, `disjoint`, ...) as the old value.
+Assignment of partitions is now allowed. The new value of the partition must be of the same region as the old value, but disjointness and completeness currently don't matter.
 
 Internally, the store $S$ also keeps a map from partition variables to their values, which is updated on assignment.
 
