@@ -21,7 +21,7 @@ Incomplete operational semantics for this idealized version of Regent are in dev
 
 ## Functions and tasks
 
-Tasks take regions, field spaces, primitives as arguments, and return primitives. Functions also exist, and have no special properties.
+Tasks take regions, field spaces, primitives as arguments, and return primitives. Functions also exist, and unlike regions have no special properties.
 
 \[T-Function]
 
@@ -34,6 +34,8 @@ $$\frac{\begin{align*}
 }$$
 
 ## Reduction
+
+One can only reduce by a few, specified operators; this is a restriction compared to oopsla2013
 
 ```
 \phi ::= reads(r) | writes(r) | reduces_reduceid(r)
@@ -64,13 +66,23 @@ TODO: write other rules
 
 ## Dynamic region creation
 
+No change needed because types are already parametrized over regions.
+
 ## Arbitrary partition indexing
 
+
+
 ## Field-specific privileges
+
+`r` in the $$\Phi$$ definition now means either a region or a field of a region.
 
 ## Region relations -> field spaces
 
 See [[Regent Extensions]].
+
+# Proving soundness
+
+We will partially extend the proofs of soundness provided in oopsla2013 and dpl2016 to this extended type system...
 
 [dpl2016]: https://legion.stanford.edu/pdfs/dpl2016.pdf
 
