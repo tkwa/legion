@@ -15,7 +15,7 @@ The type system of the version of Regent I will formalize differs from the type 
 Incomplete operational semantics for this idealized version of Regent are in development. However, the type system actually implemented in Regent as of June 2020 is more complicated due to implementation details. It differs from the described features in the following ways:
 
 - Some dependent partitioning features from [dpl2016] are implemented; some are not
-- Partitions can have an arbitrary number of subregions, in contrast to the `T-Partition` rule in oopsla2013 where ???
+- Partitions can have an arbitrary number of regions (not fixed at compile-time).
 
 # Formalization
 
@@ -70,11 +70,11 @@ No change needed because types are already parametrized over regions.
 
 ## Arbitrary partition indexing
 
-
+Can be implemented as a simple rule. There is no type-checking that the thing being indexed is a partition, because partition is not its own type
 
 ## Field-specific privileges
 
-`r` in the $$\Phi$$ definition now means either a region or a field of a region.
+`r` in the $\Phi$ definition now means either a region or a field of a region.
 
 ## Region relations -> field spaces
 

@@ -29,9 +29,20 @@ There are no new formal semantics compared with [oopsla2013]. We do not introduc
 
 Assignment of regions and field spaces is now legal. A field space must be reassigned to a value of the same type. A region must be reassigned to a value of the same type. Recall that newly created regions are always a new type, and types are parametrized over regions, thus making newly created field spaces a new type; therefore, no nontrivial assignments can be made without further extensions.
 
+Note that oopsla2013 uses a `let...in` syntax rather than imperative assignment.
+
+This extension does include a privileged region type, which can also be passed to tasks.
+
 ### Formalization
 
-$$%TODO: write formal semantics$$
+[T-RegionAssign1]
+
+$$\frac{\begin{align*}
+& x : prreg\_t(r_i)
+\\& e_1 : T
+\end{align*}}{
+M,L,H,S,C \vdash x := e_1 : nil\_t}
+$$
 $$%TODO Think about what properties are in the physical region store Z and whether this can be combined with S from oopsla2013$$
 
 Keep a store $Z$ that maps logical to physical regions. Upon encountering a region `x.r` within a field space `f`, the compiler does the following:
@@ -58,9 +69,9 @@ Field space types are extended to include privileges. Field space types still mu
 $$\frac{\begin{align*}
 & T_{fs} = fspace\_t(\Omega, s_1, \dots, s_n, t_1, \dots, t_n)
 	&\text{field space type}
-\\& M,L,H,S,C \vdash \forall i \exists r_i \quad  x_i : prreg(r_i) = s_i &\text{region arguments}
+\\& M,L,H,S,C \vdash \forall i \exists r_i \quad  x_i : prreg\_t_(r_i) = s_i &\text{region arguments}
 \\& M,L,H,S,C \vdash \forall j \quad  y_i : t_i &\text{fields}
-\\& \Omega[\dots] \subseteq \Omega^* &\text{constraint closure}
+\\& \Omega[r_1 ] \subseteq \Omega^* &\text{constraint closure}
 \\& ... % TODO add constraints
 \end{align*}}{
 M,L,H,S,C \vdash fspace(x_1, \dots, x_k, y_1, \dots, y_l) : T_{fs}
@@ -83,14 +94,33 @@ regentlib.start(main)
 
 ## Partition assignment
 
-Assignment of partitions is now allowed. The new value of the partition must be of the same region as the old value, but disjointness and completeness currently don't matter.
+Assignment of partitions is now allowed. The new value of the partition must be of the same region as the old value, but disjointness and completeness need not be preserved.
 
 Internally, the store $S$ also keeps a map from partition variables to their values, which is updated on assignment.
 
 See `repartition.rg` for a positive example and `repartition_fail.rg` for a negative example.
 
+## Lenient checking of fspace assignment
+
+- Makes fspace assignment useful by allowing different regions
+- changes unpack rules to introduce new privileges
+
+## Strict checking of region and fspace assignment
+
+Includes the following features:
+
+- Inferring when a task returns an alias or subregion of its argument
+- A region relation with privileges decomposes into a universal quantification thing similar to the construction for functions?
+	- this wouldn't be a new type, just syntactic sugar for new variables for each type read/written
+
+## Privilege inference
+
+- Privilege inference (automatic detection of read or write commands)
+- out of scope of this document
 
 # Proofs
+
+Section under construction.
 
 [oopsla2013]: https://legion.stanford.edu/pdfs/oopsla2013.pdf
 [flua]: https://scholarworks.sjsu.edu/cgi/viewcontent.cgi?article=1386&context=etd_projects
